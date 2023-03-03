@@ -23,3 +23,71 @@ body {
 .ant-layout {
   min-height: 100vh;
 }
+
+.ant-layout-sider {
+  flex: 0 0 250px !important;
+  max-width: 250px !important;
+  min-width: 250px !important;
+  width: 250px !important;
+}
+
+.ant-layout-sider-collapsed {
+  flex: 0 0 80px !important;
+  max-width: 80px !important;
+  min-width: 80px !important;
+  width: 80px !important;
+}
+
+.logo {
+  background-color: #ffd333;
+  margin: 0;
+  height: 64px;
+}
+
+.sm-logo {
+  display: none;
+}
+
+.ant-layout-sider-collapsed .sm-logo {
+  display: block;
+}
+
+.ant-layout-sider-collapsed .lg-logo {
+  display: none;
+}
+
+main {
+  overflow-y: scroll;
+}
+
+.ant-menu-title-content {
+  font-size: 1.2em;
+}
+
+.ant-layout-header h5 {
+  line-height: 24px;
+  font-size: 14px;
+  margin-top: 5px;
+  margin-bottom: 0;
+}
+.ant-layout-header p {
+  line-height: 20px;
+  margin-bottom: 0;
+}
+
+.ant-layout-header svg {
+  width: 2em;
+  height: 2em;
+}
+
+.ant-layout-header div .badge {
+  position: absolute;
+  top: 8px;
+  right: -5px;
+  background-color: #f5222d;
+  color: #fff;
+  border-radius: 50%;
+  padding: 0 5px;
+  font-size: 12px;
+  line-height: 20px;
+}
