@@ -50,7 +50,7 @@ const MainLayout = () => {
             if (key === "signout") {
               navigate("/login");
             } else {
-              navigate(`/${key.key}`);
+              navigate(`/admin/${key.key}`);
             }
           }}
           items={[
