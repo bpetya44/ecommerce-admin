@@ -4,3 +4,11 @@
 .red {
   color: red;
 }
+.RichTextEditor__editor___1QqIU {
+  min-height: 200px;
+  line-height: 1.5;
+  padding: 10px;
+  outline: none;
+  resize: none;
+  overflow: auto;
+}

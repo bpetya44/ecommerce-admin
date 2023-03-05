@@ -12,6 +12,11 @@ import CategoryList from "./CategoryList";
 import BrandList from "./BrandList";
 import ProductList from "./ProductList";
 import AddBlog from "./AddBlog";
+import AddBlogCategory from "./AddBlogCategory";
+import AddColorCategory from "./AddColorCategory";
+import AddCategory from "./AddCategory";
+import AddBrand from "./AddBrand";
+import AddProduct from "./AddProduct";
 
 export {
   Dashboard,
@@ -28,4 +33,9 @@ export {
   BrandList,
   ProductList,
   AddBlog,
+  AddBlogCategory,
+  AddColorCategory,
+  AddCategory,
+  AddBrand,
+  AddProduct,
 };

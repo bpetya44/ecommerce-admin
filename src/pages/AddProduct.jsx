@@ -26,7 +26,7 @@ const props = {
   },
 };
 
-const AddBlog = () => {
+const AddProduct = () => {
   const [desc, setDesc] = useState(RichTextEditor.createEmptyValue());
   const handleDescription = (value) => {
     setDesc(value);
@@ -34,10 +34,34 @@ const AddBlog = () => {
 
   return (
     <div>
-      <h3 className="mb-4">Add Blog</h3>
-
-      <div className="">
+      <h3 className="mb-4">Add Product</h3>
+      <div>
         <form action="">
+          <CustomInput type="text" label="Enter Product Title" />
+
+          <div className="mb-3">
+            <RichTextEditor
+              value={desc}
+              onChange={(e) => {
+                handleDescription(e);
+              }}
+            />
+          </div>
+
+          <CustomInput type="number" label="Enter Product Price" />
+
+          <select name="" id="" className="form-control py-3 mb-3">
+            <option value="">Select Brand</option>
+          </select>
+          <select name="" id="" className="form-control py-3 mb-3">
+            <option value="">Select Category</option>
+          </select>
+          <select name="" id="" className="form-control py-3 mb-3">
+            <option value="">Select Color</option>
+          </select>
+
+          <CustomInput type="number" label="Enter Quantity" />
+
           <Dragger {...props}>
             <p className="ant-upload-drag-icon">
               <InboxOutlined />
@@ -51,25 +75,8 @@ const AddBlog = () => {
             </p>
           </Dragger>
 
-          <div className="mt-4">
-            <CustomInput type="text" label="Title" placeholder="Enter Title" />
-          </div>
-
-          <select name="" id="" className="form-control py-3 mb-3">
-            <option value="">Select Category</option>
-          </select>
-
-          <RichTextEditor
-            value={desc}
-            onChange={(e) => {
-              handleDescription(e);
-            }}
-          />
-          <button
-            type="submit"
-            className="btn btn-primary border-0 rounded-3 my-3"
-          >
-            Add Blog
+          <button className="btn btn-primary border-0 rounded-3 my-4">
+            Add Product
           </button>
         </form>
       </div>
@@ -77,4 +84,4 @@ const AddBlog = () => {
   );
 };
 
-export default AddBlog;
+export default AddProduct;

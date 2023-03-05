@@ -15,6 +15,11 @@ import {
   BrandList,
   ProductList,
   AddBlog,
+  AddBlogCategory,
+  AddColorCategory,
+  AddCategory,
+  AddBrand,
+  AddProduct,
 } from "./pages/index.js";
 import MainLayout from "./components/MainLayout";
 
@@ -33,10 +38,15 @@ function App() {
           <Route path="orders" element={<Orders />} />
           <Route path="customers" element={<Customers />} />
           <Route path="color-list" element={<ColorList />} />
+          <Route path="color" element={<AddColorCategory />} />
           <Route path="category-list" element={<CategoryList />} />
+          <Route path="category" element={<AddCategory />} />
           <Route path="brand-list" element={<BrandList />} />
+          <Route path="brand" element={<AddBrand />} />
           <Route path="product-list" element={<ProductList />} />
+          <Route path="product" element={<AddProduct />} />
           <Route path="blog" element={<AddBlog />} />
+          <Route path="blog-category" element={<AddBlogCategory />} />
         </Route>
       </Routes>
     </Router>
