@@ -21,6 +21,7 @@ import {
 import { GrUserAdmin } from "react-icons/gr";
 import { Layout, Menu, theme } from "antd";
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { useNavigate, Outlet } from "react-router-dom";
 const { Header, Sider, Content } = Layout;
 const MainLayout = () => {
@@ -172,12 +173,51 @@ const MainLayout = () => {
               <AiFillBell />
               <span className="badge">3</span>
             </div>
-            <div>
-              <img className="w-50" src="../images/user.png" alt="admin" />
-            </div>
-            <div className="">
-              <h5>Petya</h5>
-              <p>petya@b.me</p>
+
+            <div className="dropdown">
+              <button
+                className="btn border-0 dropdown-toggle d-flex align-items-center gap-2"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <div>
+                  <img className="w-50" src="../images/user.png" alt="admin" />
+                </div>
+                <div style={{ fontSize: "0.7rem" }}>
+                  <p className="mb-0">Petya</p>
+                  <p className="mb-0">petya@b.me</p>
+                </div>
+              </button>
+
+              <ul className="dropdown-menu">
+                <li>
+                  <Link
+                    className="dropdown-item mb-1"
+                    style={{
+                      height: "auto",
+                      lineHeight: "24px",
+                      fontSize: "0.8rem",
+                    }}
+                    to="/"
+                  >
+                    My Profile
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    className="dropdown-item mb-1"
+                    style={{
+                      height: "auto",
+                      lineHeight: "24px",
+                      fontSize: "0.8rem",
+                    }}
+                    to="/"
+                  >
+                    Sign Out
+                  </Link>
+                </li>
+              </ul>
             </div>
           </div>
         </Header>
