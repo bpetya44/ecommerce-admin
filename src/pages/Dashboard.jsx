@@ -119,12 +119,12 @@ const Dashboard = () => {
   };
   return (
     <div>
-      <h1 className="mb-4 fs-3">Dashboard</h1>
+      <h1 className="mb-4 fs-3 title">Dashboard</h1>
 
-      <div className="d-flex justify-content-between align-items-center gap-3">
+      <div className="d-flex justify-content-between align-items-center gap-3 mb-4">
         <div className="d-flex flex-grow-1 justify-content-between align-items-end bg-white p-3 rounded-3">
           <div>
-            <p className="mb-0">Total:</p>
+            <p className="mb-0 light">Total Orders:</p>
             <h4>$1100</h4>
           </div>
           <div className="d-flex flex-column align-items-end">
@@ -132,13 +132,13 @@ const Dashboard = () => {
               <BsGraphDownArrow className="me-1" />
               32%
             </h6>
-            <p className="mb-0">Compared to April, 2022</p>
+            <p className="mb-0 light">Compared to April, 2022</p>
           </div>
         </div>
 
         <div className="d-flex flex-grow-1 justify-content-between align-items-end bg-white p-3 rounded-3">
           <div>
-            <p className="mb-0">Total:</p>
+            <p className="mb-0 light">Total:</p>
             <h4>$1100</h4>
           </div>
           <div className="d-flex flex-column align-items-end">
@@ -146,13 +146,13 @@ const Dashboard = () => {
               <BsGraphDownArrow className="me-1" />
               32%
             </h6>
-            <p className="mb-0">Compared to April, 2022</p>
+            <p className="mb-0 light">Compared to April, 2022</p>
           </div>
         </div>
 
         <div className="d-flex flex-grow-1 justify-content-between align-items-end bg-white p-3 rounded-3">
           <div>
-            <p className="mb-0">Total:</p>
+            <p className="mb-0 light">Total:</p>
             <h4>$1100</h4>
           </div>
           <div className="d-flex flex-column align-items-end">
@@ -160,22 +160,22 @@ const Dashboard = () => {
               <BsGraphDownArrow className="me-1" />
               32%
             </h6>
-            <p className="mb-0">Compared to April, 2022</p>
+            <p className="mb-0 light">Compared to April, 2022</p>
           </div>
         </div>
       </div>
 
       {/* Income stats */}
-      <div className="my-4">
-        <h3>Income Statistics</h3>
+      <div className="mb-4">
+        <h3 className="sub-title mb-4">Income Statistics</h3>
         <div>
           <Column {...config} />
         </div>
       </div>
 
       {/* Data Table */}
-      <div className="mb-4">
-        <h3 className="mb-3">Recent Orders</h3>
+      <div className="mb-4 ">
+        <h3 className="mb-3 sub-title">Recent Orders</h3>
         <div>
           {" "}
           <Table columns={columns} dataSource={data1} />
@@ -183,8 +183,8 @@ const Dashboard = () => {
       </div>
 
       {/* Recent Reviews */}
-      <div className="mb-4">
-        <h3 className="mb-3">Recent Reviews</h3>
+      <div className="mb-4 ">
+        <h3 className="mb-3 sub-title">Recent Reviews</h3>
         <div></div>
       </div>
     </div>

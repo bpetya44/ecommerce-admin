@@ -4,7 +4,7 @@ import CustomInput from "../components/CustomInput";
 const AddColorCategory = () => {
   return (
     <div>
-      <h3 className="mb-4">Add Color Category</h3>
+      <h3 className="mb-4 title">Add Color Category</h3>
       <div>
         <form action="">
           <CustomInput type="color" label="Enter Color Category" />

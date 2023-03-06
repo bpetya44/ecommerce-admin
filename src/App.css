@@ -1,8 +1,21 @@
+html {
+  --color-212529: #212529;
+  --color-ffd333: #ffd333;
+  --color-478d24: #478d24;
+  --color-e52e2e: #e52e2e;
+  --color-ed464d: #ed464d;
+  --color-828599: #828599;
+  --color-3d4640: #3d4640;
+}
+* {
+  font-family: "Poppins", sans-serif;
+}
+
 .green {
-  color: green;
+  color: var(--color-478d24);
 }
 .red {
-  color: red;
+  color: var(--color-e52e2e);
 }
 .RichTextEditor__editor___1QqIU {
   min-height: 200px;
@@ -11,4 +24,28 @@
   outline: none;
   resize: none;
   overflow: auto;
+}
+
+.form-control {
+  height: 40px;
+  padding: 0 10px;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--color-212529);
+  margin-bottom: 10px;
+}
+
+.sub-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--color-212529);
+}
+
+.light {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--color-828599);
 }
