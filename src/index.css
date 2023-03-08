@@ -92,3 +92,8 @@ main::-webkit-scrollbar {
   font-size: 12px;
   line-height: 20px;
 }
+
+.error {
+  font-size: 16px;
+  margin-left: 10px;
+}
