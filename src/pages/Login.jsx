@@ -34,11 +34,11 @@ const Login = () => {
 
   useEffect(() => {
     if (isSucces) {
-      redirect("/admin");
+      redirect("admin");
     }
     if (isError) {
-      alert(message);
-      redirect("/login");
+      //alert(message);
+      redirect("");
     }
   }, [user, isLoading, isError, isSucces, message]);
 
@@ -47,6 +47,10 @@ const Login = () => {
       <div className="my-5 w-25 bg-white rounded-3 mx-auto p-3">
         <h3 className="text-center">Login</h3>
         <p className="text-center">Login to your account to continue</p>
+
+        <div className="error text-danger text-center">
+          {isError ? <div>{message.message}</div> : null}
+        </div>
         <form action="" onSubmit={formik.handleSubmit}>
           <CustomInput
             type="text"
