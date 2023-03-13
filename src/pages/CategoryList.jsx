@@ -1,35 +1,52 @@
-import React from "react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { Table } from "antd";
+import { BiEdit, BiTrash } from "react-icons/bi";
+import { getCategories } from "../features/category/categorySlice";
 
 const columns = [
   {
-    title: "Order #",
+    title: "#",
     dataIndex: "key",
   },
   {
-    title: "Name",
-    dataIndex: "name",
+    title: "Title",
+    dataIndex: "title",
+    sorter: (a, b) => b.title.localeCompare(a.title),
+    sortDirections: ["descend"],
   },
   {
-    title: "Product",
-    dataIndex: "product",
-  },
-  {
-    title: "Status",
-    dataIndex: "status",
+    title: "Action",
+    dataIndex: "action",
   },
 ];
-const data1 = [];
-for (let i = 0; i < 46; i++) {
-  data1.push({
-    key: i,
-    name: `Edward King ${i}`,
-    product: 32,
-    status: `London, Park Lane no. ${i}`,
-  });
-}
 
 const CategoryList = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getCategories());
+  }, [dispatch]);
+
+  const categoryState = useSelector((state) => state.category.categories);
+  const data1 = [];
+  for (let i = 0; i < categoryState.length; i++) {
+    data1.push({
+      key: i + 1,
+      title: categoryState[i].title,
+      action: (
+        <>
+          <Link className="text-danger fs-5" to="/">
+            <BiEdit />
+          </Link>
+          <Link className="text-danger ms-3 fs-5" to="/">
+            <BiTrash />
+          </Link>
+        </>
+      ),
+    });
+  }
   return (
     <div>
       <h3 className="mb-4 title">Categories</h3>

@@ -22,7 +22,7 @@ const initialState = {
 };
 
 export const customerSlice = createSlice({
-  name: "users",
+  name: "customers",
   initialState,
   reducers: {},
   extraReducers: (builder) => {

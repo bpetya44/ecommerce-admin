@@ -15,7 +15,7 @@ const columns = [
   {
     title: "Title",
     dataIndex: "title",
-    sorter: (a, b) => a.title.length - b.title.length,
+    sorter: (a, b) => b.title.localeCompare(a.title),
     sortDirections: ["descend"],
   },
   {
@@ -33,13 +33,13 @@ const columns = [
   {
     title: "Category",
     dataIndex: "category",
-    sorter: (a, b) => a?.category?.length - b?.category?.length,
+    sorter: (a, b) => b.title.localeCompare(a.title),
     sortDirections: ["descend"],
   },
   {
     title: "Brand",
     dataIndex: "brand",
-    sorter: (a, b) => a?.brand?.length - b?.brand?.length,
+    sorter: (a, b) => b.title.localeCompare(a.title),
     sortDirections: ["descend"],
   },
   {
