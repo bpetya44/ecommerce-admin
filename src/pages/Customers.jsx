@@ -11,6 +11,8 @@ const columns = [
   {
     title: "Name",
     dataIndex: "name",
+    defaultSortOrder: "descend",
+    sorter: (a, b) => a.name.length - b.name.length,
   },
   {
     title: "Email",
@@ -27,7 +29,7 @@ const Customers = () => {
 
   useEffect(() => {
     dispatch(getUsers());
-  }, [dispatch]);
+  }, []);
 
   const customerState = useSelector((state) => state.customer.customers);
   //console.log(state);

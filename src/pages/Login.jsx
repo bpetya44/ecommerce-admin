@@ -30,17 +30,18 @@ const Login = () => {
     },
   });
   const authState = useSelector((state) => state);
-  const { user, isLoading, isError, isSucces, message } = authState.auth;
 
+  const { user, isLoading, isError, isSuccess, message } = authState.auth;
+  console.log(isSuccess);
   useEffect(() => {
-    if (isSucces) {
-      redirect("admin");
+    if (isSuccess) {
+      navigate("admin");
     }
     if (isError) {
       //alert(message);
-      redirect("");
+      navigate("");
     }
-  }, [user, isLoading, isError, isSucces, message]);
+  }, [user, isLoading, isError, isSuccess, message, navigate]);
 
   return (
     <div className="py-5" style={{ background: "#ffd333", minHeight: "100vh" }}>
