@@ -1,35 +1,60 @@
-import React from "react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { Table } from "antd";
+import { BiEdit, BiTrash } from "react-icons/bi";
+import { getBlogs } from "../features/blogList/blogSlice";
 
 const columns = [
   {
-    title: "Order #",
+    title: "#",
     dataIndex: "key",
   },
   {
-    title: "Name",
-    dataIndex: "name",
+    title: "Title",
+    dataIndex: "title",
+    sorter: (a, b) => b.title.localeCompare(a.title),
+    sortDirections: ["descend"],
   },
   {
-    title: "Product",
-    dataIndex: "product",
+    title: "Category",
+    dataIndex: "category",
+    sorter: (a, b) => b.category.localeCompare(a.category),
+    sortDirections: ["descend"],
   },
   {
-    title: "Status",
-    dataIndex: "status",
+    title: "Action",
+    dataIndex: "action",
   },
 ];
-const data1 = [];
-for (let i = 0; i < 46; i++) {
-  data1.push({
-    key: i,
-    name: `Edward King ${i}`,
-    product: 32,
-    status: `London, Park Lane no. ${i}`,
-  });
-}
 
 const BlogList = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getBlogs());
+  }, [dispatch]);
+
+  const blogState = useSelector((state) => state.blog.blogs);
+  const data1 = [];
+  for (let i = 0; i < blogState.length; i++) {
+    data1.push({
+      key: i + 1,
+      title: blogState[i].title,
+      category: blogState[i].category,
+      action: (
+        <>
+          <Link className="text-danger fs-5" to="/">
+            <BiEdit />
+          </Link>
+          <Link className="text-danger ms-3 fs-5" to="/">
+            <BiTrash />
+          </Link>
+        </>
+      ),
+    });
+  }
+
   return (
     <div>
       <h3 className="mb-4 title">Blog List</h3>
