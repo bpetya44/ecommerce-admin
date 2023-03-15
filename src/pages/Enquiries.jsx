@@ -40,6 +40,10 @@ const columns = [
     title: "Status",
     dataIndex: "status",
   },
+  {
+    title: "Action",
+    dataIndex: "action",
+  },
 ];
 
 const Enquiries = () => {
@@ -67,9 +71,6 @@ const Enquiries = () => {
       ),
       action: (
         <>
-          <Link className="text-danger fs-5" to="/">
-            <BiEdit />
-          </Link>
           <Link className="text-danger ms-3 fs-5" to="/">
             <BiTrash />
           </Link>

@@ -12,12 +12,12 @@ const columns = [
     title: "Name",
     dataIndex: "name",
     defaultSortOrder: "descend",
-    sorter: (a, b) => b.title.localeCompare(a.title),
+    sorter: (a, b) => b.name.localeCompare(a.name),
   },
   {
     title: "Email",
     dataIndex: "email",
-    sorter: (a, b) => b.title.localeCompare(a.title),
+    sorter: (a, b) => b.email.localeCompare(a.email),
   },
   {
     title: "Mobile",
