@@ -1,4 +1,4 @@
-html {
+:root {
   --color-212529: #212529;
   --color-ffd333: #ffd333;
   --color-478d24: #478d24;
@@ -24,6 +24,10 @@ html {
   outline: none;
   resize: none;
   overflow: auto;
+}
+.ql-container {
+  min-height: 120px;
+  background-color: white;
 }
 
 .form-control {

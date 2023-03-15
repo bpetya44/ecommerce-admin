@@ -1,35 +1,94 @@
-import React from "react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { Table } from "antd";
+import { BiEdit, BiTrash } from "react-icons/bi";
+//import { getUserOrders } from "../features/auth/authSlice";
+import { getAllOrders } from "../features/auth/authSlice";
 
 const columns = [
   {
-    title: "Order #",
+    title: "#",
     dataIndex: "key",
+  },
+  {
+    title: "Cteated At",
+    dataIndex: "createdAt",
+    sorter: (a, b) => b.createdAt.localeCompare(a.createdAt),
+    sortDirections: ["descend"],
   },
   {
     title: "Name",
     dataIndex: "name",
+    sorter: (a, b) => b.name.localeCompare(a.name),
+    sortDirections: ["descend"],
   },
   {
-    title: "Product",
+    title: "Products",
     dataIndex: "product",
   },
   {
-    title: "Status",
-    dataIndex: "status",
+    title: "Amount",
+    dataIndex: "amount",
+    sorter: (a, b) => a.amount - b.amount,
+    sortDirections: ["descend"],
+  },
+
+  {
+    title: "Action",
+    dataIndex: "action",
   },
 ];
-const data1 = [];
-for (let i = 0; i < 46; i++) {
-  data1.push({
-    key: i,
-    name: `Edward King ${i}`,
-    product: 32,
-    status: `London, Park Lane no. ${i}`,
-  });
-}
 
 const Orders = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getAllOrders());
+  }, [dispatch]);
+
+  const orderState = useSelector((state) => state.auth.orders);
+  console.log(orderState);
+  const data1 = [];
+  for (let i = 0; i < orderState.length; i++) {
+    data1.push({
+      key: i + 1,
+
+      createdAt: new Date(orderState[i].createdAt).toLocaleString(),
+      // `${orderState[i].createdAt.toString().split("T")[0]} ${
+      //   orderState[i].createdAt.toString().split("T")[1].split(".")[0]}`,
+      name: (
+        <>
+          <p>{`${orderState[i].orderedBy.firstName} ${orderState[i].orderedBy.lastName}`}</p>
+          <p>{orderState[i].orderedBy.email}</p>
+          <p>{orderState[i].orderedBy.mobile}</p>
+        </>
+      ),
+
+      product: orderState[i].products.map((product, _id) => {
+        return (
+          <p key={_id}>
+            <Link to={`/order/${orderState[i]._id}`}>
+              {product.product.title}
+            </Link>
+          </p>
+        );
+      }),
+
+      amount: orderState[i].paymentIntent.amount,
+
+      action: (
+        <>
+          <Link className="text-danger fs-5" to="/">
+            <BiEdit />
+          </Link>
+          <Link className="text-danger ms-3 fs-5" to="/">
+            <BiTrash />
+          </Link>
+        </>
+      ),
+    });
+  }
   return (
     <div>
       <h3 className="mb-4 title">Orders</h3>

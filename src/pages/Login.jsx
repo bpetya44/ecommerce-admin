@@ -30,9 +30,9 @@ const Login = () => {
     },
   });
   const authState = useSelector((state) => state);
-
   const { user, isLoading, isError, isSuccess, message } = authState.auth;
-  console.log(isSuccess);
+  //console.log(isSuccess);
+
   useEffect(() => {
     if (isSuccess) {
       navigate("admin");
