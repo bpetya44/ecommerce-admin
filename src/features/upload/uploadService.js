@@ -10,12 +10,11 @@ const uploadImg = async (data) => {
 
 const deleteImg = async (id) => {
   const response = await axios.delete(
-    `${base_url}upload/delete-image/${id}}`,
-
+    `${base_url}upload/delete-image/${id}`,
     config
   );
   //console.log(response.data);
-  return response.id;
+  return response.data;
 };
 
 const uploadService = {

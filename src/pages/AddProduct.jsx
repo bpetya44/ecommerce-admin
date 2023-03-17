@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import CustomInput from "../components/CustomInput";
+import { useNavigate } from "react-router-dom";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { useState } from "react";
@@ -13,6 +14,7 @@ import "react-widgets/styles.css";
 import { getColors } from "../features/color/colorSlice";
 import Dropzone from "react-dropzone";
 import { uploadImg, deleteImg } from "../features/upload/uploadSlice";
+import { createProduct } from "../features/product/productSlice";
 
 //Yup schema
 let schema = yup.object({
@@ -20,47 +22,25 @@ let schema = yup.object({
   description: yup.string().required("Description is required"),
   price: yup.number().required("Price is required"),
   brand: yup.string().required("Brand is required"),
+  color: yup
+    .array()
+    .min(1, "Pick at least one color")
+    .required("Color is required"),
   category: yup.string().required("Category is required"),
-  color: yup.array().required("Color is required"),
   quantity: yup.number().required("Quantity is required"),
 });
 
 const AddProduct = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [color, setColor] = useState([]);
   const [images, setImages] = useState([]);
-
-  const handleColor = (e) => {
-    setColor(e);
-  };
-
-  const formik = useFormik({
-    initialValues: {
-      title: "",
-      description: "",
-      price: "",
-      brand: "",
-      category: "",
-      color: [],
-      quantity: "",
-      images: [],
-    },
-    validationSchema: schema,
-
-    onSubmit: (values) => {
-      //console.log(values);
-      //dispatch(login(values));
-      alert(JSON.stringify(values, null, 2));
-    },
-  });
 
   useEffect(() => {
     dispatch(getBrands());
     dispatch(getCategories());
     dispatch(getColors());
-    formik.values.color = color;
-    formik.values.images = images;
-  }, [color, dispatch, formik.values, images]);
+  }, [dispatch]);
 
   const brandState = useSelector((state) => state.brand.brands);
   //console.log(brandState);
@@ -90,6 +70,36 @@ const AddProduct = () => {
   imageState.forEach((i) => img.push({ public_id: i.public_id, url: i.url }));
   //console.log(img);
 
+  useEffect(() => {
+    formik.values.color = color;
+    formik.values.images = img;
+  }, [color, img]);
+
+  const formik = useFormik({
+    initialValues: {
+      title: "",
+      description: "",
+      price: "",
+      brand: "",
+      category: "",
+      color: [],
+      quantity: "",
+      images: [],
+    },
+    validationSchema: schema,
+
+    onSubmit: (values) => {
+      //console.log(values);
+      dispatch(createProduct(values));
+      //alert(JSON.stringify(values, null, 2));
+    },
+  });
+
+  const handleColor = (e) => {
+    setColor(e);
+    console.log(color);
+  };
+
   return (
     <div>
       <h3 className="mb-4 title">Add Product</h3>
@@ -108,13 +118,11 @@ const AddProduct = () => {
             val={formik.values.title}
           />
           <div className="error">
-            {formik.touched.title && formik.errors.title ? (
-              <div>{formik.errors.title}</div>
-            ) : null}
+            {formik.touched.title && formik.errors.title}
           </div>
 
           {/* Description */}
-          <div className="">
+          <div>
             <ReactQuill
               theme="snow"
               name="description"
@@ -123,9 +131,7 @@ const AddProduct = () => {
             />
           </div>
           <div className="error">
-            {formik.touched.description && formik.errors.description ? (
-              <div>{formik.errors.description}</div>
-            ) : null}
+            {formik.touched.description && formik.errors.description}
           </div>
 
           {/* Price */}
@@ -138,9 +144,7 @@ const AddProduct = () => {
             val={formik.values.price}
           />
           <div className="error">
-            {formik.touched.price && formik.errors.price ? (
-              <div>{formik.errors.price}</div>
-            ) : null}
+            {formik.touched.price && formik.errors.price}
           </div>
 
           {/* Select Brand */}
@@ -155,9 +159,7 @@ const AddProduct = () => {
             {brandList}
           </select>
           <div className="error">
-            {formik.touched.brand && formik.errors.brand ? (
-              <div>{formik.errors.brand}</div>
-            ) : null}
+            {formik.touched.brand && formik.errors.brand}
           </div>
 
           {/* Select Category */}
@@ -172,9 +174,7 @@ const AddProduct = () => {
             {categoryList}
           </select>
           <div className="error">
-            {formik.touched.category && formik.errors.category ? (
-              <div>{formik.errors.category}</div>
-            ) : null}
+            {formik.touched.category && formik.errors.category}
           </div>
 
           {/* Select Color */}
@@ -189,9 +189,7 @@ const AddProduct = () => {
             }}
           />
           <div className="error">
-            {formik.touched.color && formik.errors.color ? (
-              <div>{formik.errors.color}</div>
-            ) : null}
+            {formik.touched.color && formik.errors.color}
           </div>
 
           {/* Enter Quantity */}
@@ -204,9 +202,7 @@ const AddProduct = () => {
             val={formik.values.quantity}
           />
           <div className="error">
-            {formik.touched.quantity && formik.errors.quantity ? (
-              <div>{formik.errors.quantity}</div>
-            ) : null}
+            {formik.touched.quantity && formik.errors.quantity}
           </div>
 
           {/* Drop image files */}
@@ -242,7 +238,10 @@ const AddProduct = () => {
             ))}
           </div>
 
-          <button className="btn btn-primary border-0 rounded-3 my-4">
+          <button
+            className="btn btn-primary border-0 rounded-3 my-4"
+            type="submit"
+          >
             Add Product
           </button>
         </form>
