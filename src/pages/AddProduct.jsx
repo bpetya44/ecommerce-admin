@@ -12,7 +12,7 @@ import Multiselect from "react-widgets/Multiselect";
 import "react-widgets/styles.css";
 import { getColors } from "../features/color/colorSlice";
 import Dropzone from "react-dropzone";
-import { uploadImg } from "../features/upload/uploadSlice";
+import { uploadImg, deleteImg } from "../features/upload/uploadSlice";
 
 //Yup schema
 let schema = yup.object({
@@ -27,15 +27,40 @@ let schema = yup.object({
 
 const AddProduct = () => {
   const dispatch = useDispatch();
-
   const [color, setColor] = useState([]);
+  const [images, setImages] = useState([]);
+
+  const handleColor = (e) => {
+    setColor(e);
+  };
+
+  const formik = useFormik({
+    initialValues: {
+      title: "",
+      description: "",
+      price: "",
+      brand: "",
+      category: "",
+      color: [],
+      quantity: "",
+      images: [],
+    },
+    validationSchema: schema,
+
+    onSubmit: (values) => {
+      //console.log(values);
+      //dispatch(login(values));
+      alert(JSON.stringify(values, null, 2));
+    },
+  });
 
   useEffect(() => {
     dispatch(getBrands());
     dispatch(getCategories());
     dispatch(getColors());
     formik.values.color = color;
-  }, []);
+    formik.values.images = images;
+  }, [color, dispatch, formik.values, images]);
 
   const brandState = useSelector((state) => state.brand.brands);
   //console.log(brandState);
@@ -56,35 +81,14 @@ const AddProduct = () => {
   const colorState = useSelector((state) => state.color.colors);
   //console.log(colorState);
   const colors = [];
-  colorState.forEach((item, i) => colors.push({ color: item.title, id: i }));
-  //console.log(colors);
+  colorState.forEach((item, i) => colors.push({ id: i, color: item.title }));
+  // console.log(colors);
 
   const imageState = useSelector((state) => state.upload.images);
   //console.log(imageState);
-
-  const formik = useFormik({
-    initialValues: {
-      title: "",
-      description: "",
-      price: "",
-      brand: "",
-      category: "",
-      color: [],
-      quantity: "",
-    },
-    validationSchema: schema,
-
-    onSubmit: (values) => {
-      //console.log(values);
-      //dispatch(login(values));
-      alert(JSON.stringify(values, null, 2));
-    },
-  });
-
-  const [desc, setDesc] = useState("");
-  const handleDesc = (e) => {
-    setDesc(e);
-  };
+  const img = [];
+  imageState.forEach((i) => img.push({ public_id: i.public_id, url: i.url }));
+  //console.log(img);
 
   return (
     <div>
@@ -180,8 +184,8 @@ const AddProduct = () => {
             textField="color"
             defaultValue={[0]}
             data={colors}
-            onChange={() => {
-              setColor(formik.values.color);
+            onChange={(e) => {
+              setColor(e);
             }}
           />
           <div className="error">
@@ -228,6 +232,8 @@ const AddProduct = () => {
             {imageState.map((item, i) => (
               <div key={i} className="position-relative">
                 <button
+                  type="button"
+                  onClick={() => dispatch(deleteImg(i.public_id))}
                   className="btn-close position-absolute top-0 end-0 border-0 bg-white rounded-circle shadow-sm p-0 m-0 text-dark fs-5 fw-bold"
                   // style={{ top: "5px", right: "5px" }}
                 ></button>
