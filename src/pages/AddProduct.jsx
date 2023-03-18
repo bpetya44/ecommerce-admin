@@ -9,8 +9,7 @@ import { useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import { getBrands } from "../features/brand/brandSlice";
 import { getCategories } from "../features/category/categorySlice";
-import Multiselect from "react-widgets/Multiselect";
-import "react-widgets/styles.css";
+import { Select } from "antd";
 import { getColors } from "../features/color/colorSlice";
 import Dropzone from "react-dropzone";
 import { uploadImg, deleteImg } from "../features/upload/uploadSlice";
@@ -27,6 +26,7 @@ let schema = yup.object({
     .min(1, "Pick at least one color")
     .required("Color is required"),
   category: yup.string().required("Category is required"),
+  tags: yup.string().required("Tag is required"),
   quantity: yup.number().required("Quantity is required"),
 });
 
@@ -60,9 +60,11 @@ const AddProduct = () => {
 
   const colorState = useSelector((state) => state.color.colors);
   //console.log(colorState);
-  const colors = [];
-  colorState.forEach((item, i) => colors.push({ id: i, color: item.title }));
-  // console.log(colors);
+  const colorOption = [];
+  colorState.forEach((item) =>
+    colorOption.push({ label: item.title, value: item._id })
+  );
+  //console.log(colorOption);
 
   const imageState = useSelector((state) => state.upload.images);
   //console.log(imageState);
@@ -71,7 +73,7 @@ const AddProduct = () => {
   //console.log(img);
 
   useEffect(() => {
-    formik.values.color = color;
+    formik.values.color = color ? color : " ";
     formik.values.images = img;
   }, [color, img]);
 
@@ -82,22 +84,28 @@ const AddProduct = () => {
       price: "",
       brand: "",
       category: "",
-      color: [],
+      tags: "",
+      color: "",
       quantity: "",
-      images: [],
+      images: "",
     },
     validationSchema: schema,
 
     onSubmit: (values) => {
       //console.log(values);
       dispatch(createProduct(values));
-      //alert(JSON.stringify(values, null, 2));
+      //alert(JSON.stringify(values));
+      formik.resetForm();
+      setColor(null);
+      setTimeout(() => {
+        navigate("/admin/product-list");
+      }, 3000);
     },
   });
 
   const handleColor = (e) => {
     setColor(e);
-    console.log(color);
+    console.log(e);
   };
 
   return (
@@ -177,16 +185,34 @@ const AddProduct = () => {
             {formik.touched.category && formik.errors.category}
           </div>
 
+          {/* Select Tags */}
+          <select
+            name="tags"
+            onChange={formik.handleChange("tags")}
+            onBlur={formik.handleBlur("tags")}
+            value={formik.values.tags}
+            className="form-control py-3 mb-3"
+          >
+            <option value="" disabled>
+              Select Tags
+            </option>
+            <option value="featured">Featured</option>
+            <option value="popular">Popular</option>
+            <option value="special">Special</option>
+          </select>
+          <div className="error">
+            {formik.touched.tags && formik.errors.categortags}
+          </div>
+
           {/* Select Color */}
-          <Multiselect
-            name="color"
-            dataKey="id"
-            textField="color"
-            defaultValue={[0]}
-            data={colors}
-            onChange={(e) => {
-              setColor(e);
-            }}
+          <Select
+            mode="multiple"
+            allowClear
+            className="w-100"
+            placeholder="Select Color"
+            defaultValue={color}
+            onChange={(i) => handleColor(i)}
+            options={colorOption}
           />
           <div className="error">
             {formik.touched.color && formik.errors.color}
