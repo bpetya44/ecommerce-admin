@@ -1,3 +1,7 @@
+import React, { useState } from "react";
+import { Layout, Menu, theme } from "antd";
+import { Link, useNavigate, Outlet } from "react-router-dom";
+
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -19,11 +23,11 @@ import {
   AiFillBell,
 } from "react-icons/ai";
 import { GrUserAdmin } from "react-icons/gr";
-import { Layout, Menu, theme } from "antd";
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { useNavigate, Outlet } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const { Header, Sider, Content } = Layout;
+
 const MainLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
   const {
@@ -46,12 +50,12 @@ const MainLayout = () => {
           theme="dark"
           mode="inline"
           defaultSelectedKeys={[""]}
-          onClick={(key) => {
+          onClick={({ key }) => {
             console.log(key);
             if (key === "signout") {
               navigate("/login");
             } else {
-              navigate(`/admin/${key.key}`);
+              navigate(`/admin/${key}`);
             }
           }}
           items={[
@@ -229,6 +233,17 @@ const MainLayout = () => {
             background: colorBgContainer,
           }}
         >
+          <ToastContainer
+            position="top-center"
+            autoClose={500}
+            hideProgressBar={false}
+            newestOnTop={true}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            theme="light"
+          />
           <Outlet />
         </Content>
       </Layout>
