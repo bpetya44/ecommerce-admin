@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import CustomInput from "../components/CustomInput";
 import { useNavigate } from "react-router-dom";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { useState } from "react";
+import { toast } from "react-toastify";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,7 +13,7 @@ import { Select } from "antd";
 import { getColors } from "../features/color/colorSlice";
 import Dropzone from "react-dropzone";
 import { uploadImg, deleteImg } from "../features/upload/uploadSlice";
-import { createProduct } from "../features/product/productSlice";
+import { createProduct, resetState } from "../features/product/productSlice";
 
 //Yup schema
 let schema = yup.object({
@@ -40,7 +40,7 @@ const AddProduct = () => {
     dispatch(getBrands());
     dispatch(getCategories());
     dispatch(getColors());
-  }, [dispatch]);
+  }, []);
 
   const brandState = useSelector((state) => state.brand.brands);
   //console.log(brandState);
@@ -77,6 +77,18 @@ const AddProduct = () => {
     formik.values.images = img;
   }, [color, img]);
 
+  const newProduct = useSelector((state) => state.product);
+  const { isLoading, isSuccess, isError, createdProduct } = newProduct;
+
+  useEffect(() => {
+    if (isSuccess && createdProduct) {
+      toast.success("Product Added Successfully!");
+    }
+    if (isError) {
+      toast.error("Something went wrong!");
+    }
+  }, [isLoading, isSuccess, isError]);
+
   const formik = useFormik({
     initialValues: {
       title: "",
@@ -87,7 +99,7 @@ const AddProduct = () => {
       tags: "",
       color: "",
       quantity: "",
-      images: "",
+      images: [],
     },
     validationSchema: schema,
 
@@ -95,6 +107,7 @@ const AddProduct = () => {
       //console.log(values);
       dispatch(createProduct(values));
       //alert(JSON.stringify(values));
+      //toast.success("Product Added Successfully!");
       formik.resetForm();
       setColor(null);
       setTimeout(() => {
