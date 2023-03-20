@@ -40,7 +40,7 @@ const AddProduct = () => {
     dispatch(getBrands());
     dispatch(getCategories());
     dispatch(getColors());
-  }, []);
+  }, [dispatch]);
 
   const brandState = useSelector((state) => state.brand.brands);
   //console.log(brandState);
@@ -87,7 +87,7 @@ const AddProduct = () => {
     if (isError) {
       toast.error("Something went wrong!");
     }
-  }, [isLoading, isSuccess, isError]);
+  }, [isLoading, isSuccess, isError, createdProduct]);
 
   const formik = useFormik({
     initialValues: {

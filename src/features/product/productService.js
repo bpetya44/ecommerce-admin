@@ -8,8 +8,8 @@ const getProducts = async () => {
   return response.data;
 };
 
-const createProduct = async (data) => {
-  const response = await axios.post(`${base_url}product/`, data, config);
+const createProduct = async (product) => {
+  const response = await axios.post(`${base_url}product/`, product, config);
   //console.log(response.data);
   return response.data;
 };

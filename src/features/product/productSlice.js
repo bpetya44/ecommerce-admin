@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
 import productService from "./productService";
 
 export const getProducts = createAsyncThunk(
@@ -25,11 +25,13 @@ export const createProduct = createAsyncThunk(
   }
 );
 
+export const resetState = createAction("Reset_all");
+
 const initialState = {
   products: [],
-  isError: false,
   isLoading: false,
   isSuccess: false,
+  isError: false,
   message: "",
 };
 
@@ -68,7 +70,7 @@ export const productSlice = createSlice({
       state.isSuccess = true;
       state.isError = false;
       state.message = action.payload;
-      state.products = action.payload;
+      state.createdProduct = action.payload;
     });
     builder.addCase(createProduct.rejected, (state, action) => {
       state.isLoading = false;
@@ -76,6 +78,7 @@ export const productSlice = createSlice({
       state.isError = true;
       state.message = action.error;
     });
+    builder.addCase(resetState, () => initialState);
   },
 });
 

@@ -1,15 +1,22 @@
 import axios from "axios";
+import { config } from "../../utils/axiosconfig";
 import { base_url } from "../../utils/baseUrl";
 
 const getBrands = async () => {
-  const response = await axios.get(`${base_url}brandcategory/`);
+  const response = await axios.get(`${base_url}brand/`);
   //console.log(response.data);
+  return response.data;
+};
 
+const createBrand = async (brand) => {
+  const response = await axios.post(`${base_url}brand/`, brand, config);
+  //console.log(response.data);
   return response.data;
 };
 
 const brandService = {
   getBrands,
+  createBrand,
 };
 
 export default brandService;

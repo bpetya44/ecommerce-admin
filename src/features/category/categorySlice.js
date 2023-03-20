@@ -2,10 +2,22 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import categoryService from "./categoryService";
 
 export const getCategories = createAsyncThunk(
-  "brand/get-categories",
+  "product/get-categories",
   async (thunkAPI) => {
     try {
       const response = await categoryService.getCategories();
+      return response;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err.response.data);
+    }
+  }
+);
+
+export const createCategory = createAsyncThunk(
+  "product/create-category",
+  async (data, thunkAPI) => {
+    try {
+      const response = await categoryService.createCategory(data);
       return response;
     } catch (err) {
       return thunkAPI.rejectWithValue(err.response.data);
@@ -40,6 +52,26 @@ export const categorySlice = createSlice({
       state.categories = action.payload;
     });
     builder.addCase(getCategories.rejected, (state, action) => {
+      state.isLoading = false;
+      state.isSuccess = false;
+      state.isError = true;
+      state.message = action.error;
+    });
+    // create category
+    builder.addCase(createCategory.pending, (state) => {
+      state.isLoading = true;
+      state.isSuccess = false;
+      state.isError = false;
+      state.message = "";
+    });
+    builder.addCase(createCategory.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.isSuccess = true;
+      state.isError = false;
+      state.message = action.payload;
+      state.createdCategory = action.payload;
+    });
+    builder.addCase(createCategory.rejected, (state, action) => {
       state.isLoading = false;
       state.isSuccess = false;
       state.isError = true;
