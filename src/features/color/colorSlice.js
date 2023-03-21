@@ -13,6 +13,18 @@ export const getColors = createAsyncThunk(
   }
 );
 
+export const createColor = createAsyncThunk(
+  "color/create-color",
+  async (color, thunkAPI) => {
+    try {
+      const response = await colorService.createColor(color);
+      return response;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err.response.data);
+    }
+  }
+);
+
 export const resetState = createAction("Reset_all");
 
 const initialState = {
@@ -47,6 +59,28 @@ export const colorSlice = createSlice({
       state.isError = true;
       state.message = action.error;
     });
+
+    // create color
+    builder.addCase(createColor.pending, (state) => {
+      state.isLoading = true;
+      state.isSuccess = false;
+      state.isError = false;
+      state.message = "";
+    });
+    builder.addCase(createColor.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.isSuccess = true;
+      state.isError = false;
+      state.message = action.payload;
+      state.createdColor = action.payload;
+    });
+    builder.addCase(createColor.rejected, (state, action) => {
+      state.isLoading = false;
+      state.isSuccess = false;
+      state.isError = true;
+      state.message = action.error;
+    });
+
     builder.addCase(resetState, () => initialState);
   },
 });
