@@ -111,7 +111,8 @@ const AddProduct = () => {
       formik.resetForm();
       setColor(null);
       setTimeout(() => {
-        navigate("/admin/product-list");
+        dispatch(resetState());
+        //navigate("/admin/product-list");
       }, 3000);
     },
   });

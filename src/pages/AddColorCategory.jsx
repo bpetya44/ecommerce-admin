@@ -5,7 +5,7 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { createColor } from "../features/color/colorSlice";
+import { createColor, resetState } from "../features/color/colorSlice";
 
 //Yup schema
 let schema = yup.object({
@@ -39,7 +39,8 @@ const AddColorCategory = () => {
       formik.resetForm();
 
       setTimeout(() => {
-        navigate("/admin/color-list");
+        dispatch(resetState());
+        //navigate("/admin/color-list");
       }, 3000);
     },
   });

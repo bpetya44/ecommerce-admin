@@ -75,7 +75,7 @@ const AddBlog = () => {
       formik.resetForm();
       setTimeout(() => {
         dispatch(resetState());
-        navigate("/admin/blog-list");
+        //navigate("/admin/blog-list");
       }, 3000);
     },
   });

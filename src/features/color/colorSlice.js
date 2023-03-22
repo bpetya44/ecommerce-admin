@@ -25,7 +25,7 @@ export const createColor = createAsyncThunk(
   }
 );
 
-export const resetState = createAction("Reset_all");
+export const resetState = createAction("color/reset-state");
 
 const initialState = {
   colors: [],

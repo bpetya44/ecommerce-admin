@@ -5,7 +5,7 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { createCategory } from "../features/category/categorySlice";
+import { createCategory, resetState } from "../features/category/categorySlice";
 
 //Yup schema
 let schema = yup.object({
@@ -39,7 +39,8 @@ const AddCategory = () => {
       formik.resetForm();
 
       setTimeout(() => {
-        navigate("/admin/category-list");
+        dispatch(resetState());
+        //navigate("/admin/category-list");
       }, 3000);
     },
   });
