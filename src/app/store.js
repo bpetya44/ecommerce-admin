@@ -5,7 +5,7 @@ import productReducer from "../features/product/productSlice";
 import brandReducer from "../features/brand/brandSlice";
 import categoryReducer from "../features/category/categorySlice";
 import colorReducer from "../features/color/colorSlice";
-import blogReducer from "../features/blogList/blogSlice";
+import blogReducer from "../features/blog/blogSlice";
 import blogCategoryReducer from "../features/blogCategory/blogCategorySlice";
 import enquiryReducer from "../features/enquiry/enquirySlice";
 import uploadReducer from "../features/upload/uploadSlice";

@@ -7,7 +7,7 @@ const CustomInput = (props) => {
     <div className="form-floating mt-3">
       <input
         type={type}
-        className={`form-control ${i_class ? i_class : ""}`}
+        className={`form-control form-control-sm ${i_class ? i_class : ""}`}
         id={i_id}
         placeholder={placeholder}
         name={name}
@@ -15,7 +15,9 @@ const CustomInput = (props) => {
         onChange={onCh}
         onBlur={onBl}
       />
-      <label htmlFor={label}>{label}</label>
+      <label htmlFor={label} className="form-label">
+        {label}
+      </label>
     </div>
   );
 };

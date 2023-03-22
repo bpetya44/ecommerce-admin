@@ -51,12 +51,13 @@ const AddColorCategory = () => {
         <form action="" onSubmit={formik.handleSubmit}>
           <CustomInput
             type="color"
-            label="Enter Product Color"
+            label="Choose Color"
             name="title"
             onCh={formik.handleChange("title")}
             onBl={formik.handleBlur("title")}
             val={formik.values.title}
-            id="color"
+            i_id="color"
+            //i_class="form-control-color"
           />
           <div className="error">
             {formik.touched.title && formik.errors.title}

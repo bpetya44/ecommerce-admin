@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Table } from "antd";
 import { BiEdit, BiTrash } from "react-icons/bi";
-import { getBlogs } from "../features/blogList/blogSlice";
+import { getBlogs } from "../features/blog/blogSlice";
 
 const columns = [
   {
