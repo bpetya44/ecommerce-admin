@@ -23,6 +23,7 @@ import {
   AiFillBell,
 } from "react-icons/ai";
 import { GrUserAdmin } from "react-icons/gr";
+import { RiCoupon3Line } from "react-icons/ri";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -122,9 +123,26 @@ const MainLayout = () => {
               label: "Orders",
             },
             {
+              key: "marketing",
+              icon: <RiCoupon3Line className="fs-5" />,
+              label: "Marketing",
+              children: [
+                {
+                  key: "coupon",
+                  icon: <AiOutlineFileAdd className="fs-5" />,
+                  label: "Add Coupon",
+                },
+                {
+                  key: "coupon-list",
+                  icon: <AiOutlineAudit className="fs-5" />,
+                  label: "Coupon List",
+                },
+              ],
+            },
+            {
               key: "blogs",
               icon: <AiOutlineBook className="fs-5" />,
-              label: "Blog",
+              label: "Blogs",
               children: [
                 {
                   key: "blog",

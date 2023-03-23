@@ -20,6 +20,8 @@ import {
   AddCategory,
   AddBrand,
   AddProduct,
+  AddCoupon,
+  CouponList,
 } from "./pages/index.js";
 import MainLayout from "./components/MainLayout";
 
@@ -45,8 +47,11 @@ function App() {
           <Route path="brand" element={<AddBrand />} />
           <Route path="product-list" element={<ProductList />} />
           <Route path="product" element={<AddProduct />} />
+          <Route path="coupon-list" element={<CouponList />} />
+          <Route path="coupon" element={<AddCoupon />} />
           <Route path="blog" element={<AddBlog />} />
           <Route path="blog-category" element={<AddBlogCategory />} />
+          <Route path="*" element={<h1>404 Not Found</h1>} />
         </Route>
       </Routes>
     </Router>

@@ -17,6 +17,8 @@ import AddColorCategory from "./AddColorCategory";
 import AddCategory from "./AddCategory";
 import AddBrand from "./AddBrand";
 import AddProduct from "./AddProduct";
+import AddCoupon from "./AddCoupon";
+import CouponList from "./CouponList";
 
 export {
   Dashboard,
@@ -38,4 +40,6 @@ export {
   AddCategory,
   AddBrand,
   AddProduct,
+  AddCoupon,
+  CouponList,
 };
