@@ -1,9 +1,14 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Table } from "antd";
 import { BiEdit, BiTrash } from "react-icons/bi";
-import { getBrands } from "../features/brand/brandSlice";
+import {
+  getBrands,
+  resetState,
+  deleteBrand,
+} from "../features/brand/brandSlice";
+import CustomModal from "../components/CustomModal";
 
 const columns = [
   {
@@ -23,8 +28,19 @@ const columns = [
 ];
 
 const BrandList = () => {
-  const dispatch = useDispatch();
+  const [open, setOpen] = useState(false);
+  const [brandId, setBrandId] = useState("");
 
+  const showModal = (e) => {
+    setOpen(true);
+    setBrandId(e);
+  };
+  //console.log(brandId);
+  const hideModal = () => {
+    setOpen(false);
+  };
+
+  const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getBrands());
   }, [dispatch]);
@@ -37,16 +53,32 @@ const BrandList = () => {
       title: brandState[i].title,
       action: (
         <>
-          <Link className="text-danger fs-5" to="/">
+          <Link
+            className="text-danger fs-5"
+            to={`/admin/brand/${brandState[i]._id}`}
+          >
             <BiEdit />
           </Link>
-          <Link className="text-danger ms-3 fs-5" to="/">
+          <button
+            className="text-danger ms-3 fs-5 bg-transparent border-0"
+            onClick={() => showModal(brandState[i]._id)}
+          >
             <BiTrash />
-          </Link>
+          </button>
         </>
       ),
     });
   }
+
+  const deleteABrand = (e) => {
+    dispatch(deleteBrand(e));
+    setOpen(false);
+    dispatch(resetState());
+
+    setTimeout(() => {
+      dispatch(getBrands());
+    }, 100);
+  };
 
   return (
     <div>
@@ -54,6 +86,14 @@ const BrandList = () => {
       <div>
         <Table columns={columns} dataSource={data1} />
       </div>
+      <CustomModal
+        open={open}
+        hideModal={hideModal}
+        title="Are you sure you want to delete this brand?"
+        performAction={() => {
+          deleteABrand(brandId);
+        }}
+      />
     </div>
   );
 };

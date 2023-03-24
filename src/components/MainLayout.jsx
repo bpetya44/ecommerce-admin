@@ -52,7 +52,7 @@ const MainLayout = () => {
           mode="inline"
           defaultSelectedKeys={[""]}
           onClick={({ key }) => {
-            console.log(key);
+            // console.log(key);
             if (key === "signout") {
               navigate("/login");
             } else {
