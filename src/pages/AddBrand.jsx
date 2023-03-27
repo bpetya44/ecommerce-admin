@@ -34,7 +34,7 @@ const AddBrand = () => {
   const location = useLocation();
   //console.log(location);
   const getBrandId = location.pathname.split("/")[3];
-  console.log(getBrandId);
+  // console.log(getBrandId);
 
   useEffect(() => {
     if (getBrandId) {
@@ -84,7 +84,7 @@ const AddBrand = () => {
 
   return (
     <div>
-      <h3 className="mb-4 title">{getBrandById ? "Edit" : "Add"} Brand</h3>
+      <h3 className="mb-4 title">{getBrandId ? "Edit" : "Add"} Brand</h3>
       <div>
         <form action="" onSubmit={formik.handleSubmit}>
           {/* Title */}
@@ -103,7 +103,7 @@ const AddBrand = () => {
             className="btn btn-primary border-0 rounded-3 my-4"
             type="submit"
           >
-            {getBrandById ? "Edit" : "Add"} Brand
+            {getBrandId ? "Edit" : "Add"} Brand
           </button>
         </form>
       </div>

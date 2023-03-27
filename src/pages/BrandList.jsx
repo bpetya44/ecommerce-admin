@@ -42,6 +42,7 @@ const BrandList = () => {
 
   const dispatch = useDispatch();
   useEffect(() => {
+    dispatch(resetState());
     dispatch(getBrands());
   }, [dispatch]);
 

@@ -4,8 +4,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-import { createCategory, resetState } from "../features/category/categorySlice";
+import { useNavigate, useLocation } from "react-router-dom";
+import {
+  createCategory,
+  getCategoryById,
+  resetState,
+  updateCategory,
+} from "../features/category/categorySlice";
 
 //Yup schema
 let schema = yup.object({
@@ -15,39 +20,78 @@ let schema = yup.object({
 const AddCategory = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const newCategory = useSelector((state) => state.category);
-  const { isLoading, isSuccess, isError, createdCategory } = newCategory;
+  const {
+    isLoading,
+    isSuccess,
+    isError,
+    createdCategory,
+    categoryName,
+    updatedCategory,
+  } = newCategory;
+
+  const location = useLocation();
+  //console.log(location);
+  const getCategoryId = location.pathname.split("/")[3];
+  //console.log(getCategoryId);
+
+  useEffect(() => {
+    if (getCategoryId) {
+      dispatch(getCategoryById(getCategoryId));
+    } else {
+      dispatch(resetState());
+    }
+  }, [getCategoryId, dispatch]);
 
   useEffect(() => {
     if (isSuccess && createdCategory) {
       toast.success("Category is added Successfully!");
+      //navigate("/admin/category-list");
+    }
+    if (isSuccess && updatedCategory) {
+      toast.success("Category is updated Successfully!");
+      navigate("/admin/category-list");
     }
     if (isError) {
       toast.error("Something went wrong!");
     }
-  }, [isLoading, isSuccess, isError, createdCategory]);
+  }, [
+    isLoading,
+    isSuccess,
+    isError,
+    createdCategory,
+    updatedCategory,
+    navigate,
+  ]);
 
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
-      title: "",
+      title: categoryName || "",
     },
     validationSchema: schema,
     onSubmit: (values) => {
       //console.log(values);
-      dispatch(createCategory(values));
-      //alert(JSON.stringify(values));
-      formik.resetForm();
-
-      setTimeout(() => {
+      if (getCategoryId) {
+        dispatch(updateCategory({ id: getCategoryId, data: values }));
         dispatch(resetState());
-        //navigate("/admin/category-list");
-      }, 3000);
+      } else {
+        dispatch(createCategory(values));
+        //alert(JSON.stringify(values));
+        formik.resetForm();
+
+        setTimeout(() => {
+          dispatch(resetState());
+          //navigate("/admin/category-list");
+        }, 300);
+      }
     },
   });
 
   return (
     <div>
-      <h3 className="mb-4 title">Add Category</h3>
+      <h3 className="mb-4 title">{getCategoryId ? "Edit" : "Add"} Category</h3>
       <div>
         <form action="" onSubmit={formik.handleSubmit}>
           {/* Title */}
@@ -62,8 +106,11 @@ const AddCategory = () => {
           <div className="error">
             {formik.touched.title && formik.errors.title}
           </div>
-          <button className="btn btn-primary border-0 rounded-3 my-4">
-            Add Category
+          <button
+            className="btn btn-primary border-0 rounded-3 my-4"
+            type="submit"
+          >
+            {getCategoryId ? "Edit" : "Add"} Category
           </button>
         </form>
       </div>
