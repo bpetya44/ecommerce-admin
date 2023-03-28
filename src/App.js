@@ -55,6 +55,7 @@ function App() {
           <Route path="coupon/:id" element={<AddCoupon />} />
           <Route path="blog" element={<AddBlog />} />
           <Route path="blog-category" element={<AddBlogCategory />} />
+          <Route path="blog-category/:id" element={<AddBlogCategory />} />
           <Route path="*" element={<h1>404 Not Found</h1>} />
         </Route>
       </Routes>

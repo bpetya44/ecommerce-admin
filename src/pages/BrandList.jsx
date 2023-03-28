@@ -61,6 +61,7 @@ const BrandList = () => {
             <BiEdit />
           </Link>
           <button
+            type="submit"
             className="text-danger ms-3 fs-5 bg-transparent border-0"
             onClick={() => showModal(brandState[i]._id)}
           >

@@ -4,10 +4,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   createBlogCategory,
   resetState,
+  getBlogCategoryById,
+  updateBlogCategory,
 } from "../features/blogCategory/blogCategorySlice";
 
 //Yup schema
@@ -18,41 +20,79 @@ let schema = yup.object({
 const AddBlogCategory = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const newBlogCategory = useSelector((state) => state.blogCategory);
-  const { isLoading, isSuccess, isError, createdBlogCategory } =
-    newBlogCategory;
+  const {
+    isLoading,
+    isSuccess,
+    isError,
+    createdBlogCategory,
+    blogCategoryName,
+    updatedBlogCategory,
+  } = newBlogCategory;
+
+  const location = useLocation();
+  //console.log(location);
+  const getBlogCatId = location.pathname.split("/")[3];
+  // console.log(getBlogCatId);
+
+  useEffect(() => {
+    if (getBlogCatId) {
+      dispatch(getBlogCategoryById(getBlogCatId));
+    } else {
+      dispatch(resetState());
+    }
+  }, [getBlogCatId, dispatch]);
 
   useEffect(() => {
     if (isSuccess && createdBlogCategory) {
       toast.success("Blog Category Added Successfully!");
     }
+    if (isSuccess && updatedBlogCategory) {
+      toast.success("Blog Category Updated Successfully!");
+      navigate("/admin/blog-category-list");
+    }
     if (isError) {
       toast.error("Something went wrong!");
     }
-  }, [isLoading, isSuccess, isError, createdBlogCategory]);
+  }, [
+    isLoading,
+    isSuccess,
+    isError,
+    createdBlogCategory,
+    updatedBlogCategory,
+    navigate,
+  ]);
 
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
-      title: "",
+      title: blogCategoryName || "",
     },
     validationSchema: schema,
 
     onSubmit: (values) => {
       //console.log(values);
-      dispatch(createBlogCategory(values));
-      //alert(JSON.stringify(values));
-      formik.resetForm();
+      if (getBlogCatId) {
+        dispatch(updateBlogCategory({ id: getBlogCatId, data: values }));
+      } else {
+        dispatch(createBlogCategory(values));
+        //alert(JSON.stringify(values));
+        formik.resetForm();
 
-      setTimeout(() => {
-        dispatch(resetState());
-        //navigate("/admin/blog-category-list");
-      }, 3000);
+        setTimeout(() => {
+          dispatch(resetState());
+          //navigate("/admin/blog-category-list");
+        }, 300);
+      }
     },
   });
 
   return (
     <div>
-      <h3 className="mb-4 title">Add Blog Category</h3>
+      <h3 className="mb-4 title">
+        {getBlogCatId ? "Edit" : "Add"} Blog Category
+      </h3>
       <div>
         <form action="" onSubmit={formik.handleSubmit}>
           <CustomInput
@@ -66,8 +106,11 @@ const AddBlogCategory = () => {
           <div className="error">
             {formik.touched.title && formik.errors.title}
           </div>
-          <button className="btn btn-primary border-0 rounded-3 my-4">
-            Add Blog Category
+          <button
+            className="btn btn-primary border-0 rounded-3 my-4"
+            type="submit"
+          >
+            {getBlogCatId ? "Edit" : "Add"} Blog Category
           </button>
         </form>
       </div>
