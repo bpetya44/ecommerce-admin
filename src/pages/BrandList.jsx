@@ -78,7 +78,7 @@ const BrandList = () => {
 
     setTimeout(() => {
       dispatch(getBrands());
-    }, 100);
+    }, 300);
   };
 
   return (

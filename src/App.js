@@ -41,6 +41,7 @@ function App() {
           <Route path="customers" element={<Customers />} />
           <Route path="color-list" element={<ColorList />} />
           <Route path="color" element={<AddColorCategory />} />
+          <Route path="color/:id" element={<AddColorCategory />} />
           <Route path="category-list" element={<CategoryList />} />
           <Route path="category" element={<AddCategory />} />
           <Route path="category/:id" element={<AddCategory />} />
@@ -51,6 +52,7 @@ function App() {
           <Route path="product" element={<AddProduct />} />
           <Route path="coupon-list" element={<CouponList />} />
           <Route path="coupon" element={<AddCoupon />} />
+          <Route path="coupon/:id" element={<AddCoupon />} />
           <Route path="blog" element={<AddBlog />} />
           <Route path="blog-category" element={<AddBlogCategory />} />
           <Route path="*" element={<h1>404 Not Found</h1>} />

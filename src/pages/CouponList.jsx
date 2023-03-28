@@ -1,9 +1,14 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Table } from "antd";
 import { BiEdit, BiTrash } from "react-icons/bi";
-import { getCoupons } from "../features/coupon/couponSlice";
+import {
+  getCoupons,
+  resetState,
+  deleteCoupon,
+} from "../features/coupon/couponSlice";
+import CustomModal from "../components/CustomModal";
 
 const columns = [
   {
@@ -35,9 +40,21 @@ const columns = [
 ];
 
 const CouponList = () => {
-  const dispatch = useDispatch();
+  const [open, setOpen] = useState(false);
+  const [couponId, setCouponId] = useState("");
 
+  const showModal = (e) => {
+    setOpen(true);
+    setCouponId(e);
+  };
+  //console.log(brandId);
+  const hideModal = () => {
+    setOpen(false);
+  };
+
+  const dispatch = useDispatch();
   useEffect(() => {
+    dispatch(resetState());
     dispatch(getCoupons());
   }, [dispatch]);
 
@@ -51,16 +68,32 @@ const CouponList = () => {
       expiry: new Date(couponState[i].expiry).toLocaleString(),
       action: (
         <>
-          <Link className="text-danger fs-5" to="/">
+          <Link
+            className="text-danger fs-5"
+            to={`/admin/coupon/${couponState[i]._id}`}
+          >
             <BiEdit />
           </Link>
-          <Link className="text-danger ms-3 fs-5" to="/">
+          <button
+            className="text-danger ms-3 fs-5 bg-transparent border-0"
+            onClick={() => showModal(couponState[i]._id)}
+          >
             <BiTrash />
-          </Link>
+          </button>
         </>
       ),
     });
   }
+
+  const deleteACoupon = (e) => {
+    dispatch(deleteCoupon(e));
+    setOpen(false);
+    dispatch(resetState());
+
+    setTimeout(() => {
+      dispatch(getCoupons());
+    }, 300);
+  };
 
   return (
     <div>
@@ -68,6 +101,14 @@ const CouponList = () => {
       <div>
         <Table columns={columns} dataSource={data1} />
       </div>
+      <CustomModal
+        open={open}
+        hideModal={hideModal}
+        title="Are you sure you want to delete this coupon?"
+        performAction={() => {
+          deleteACoupon(couponId);
+        }}
+      />
     </div>
   );
 };

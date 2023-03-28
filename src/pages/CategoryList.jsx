@@ -74,11 +74,11 @@ const CategoryList = () => {
   const deleteACategory = (e) => {
     dispatch(deleteCategory(e));
     setOpen(false);
-    dispatch(resetState());
 
     setTimeout(() => {
+      dispatch(resetState());
       dispatch(getCategories());
-    }, 100);
+    }, 300);
   };
 
   return (
