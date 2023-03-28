@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import CustomInput from "../components/CustomInput";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { toast } from "react-toastify";
@@ -9,7 +9,12 @@ import { useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import Dropzone from "react-dropzone";
 import { uploadImg, deleteImg } from "../features/upload/uploadSlice";
-import { createBlog, resetState } from "../features/blog/blogSlice";
+import {
+  createBlog,
+  resetState,
+  getBlogById,
+  updateBlog,
+} from "../features/blog/blogSlice";
 import { getBlogCategories } from "../features/blogCategory/blogCategorySlice";
 
 //Yup schema
@@ -22,9 +27,21 @@ let schema = yup.object({
 const AddBlog = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [images, setImages] = useState([]);
+
+  const location = useLocation();
+  const getBlogId = location.pathname.split("/")[3];
 
   useEffect(() => {
+    if (getBlogById) {
+      dispatch(getBlogById(getBlogId));
+      img.push(blogImages);
+    } else {
+      dispatch(resetState());
+    }
+  }, [getBlogId, dispatch]);
+
+  useEffect(() => {
+    dispatch(resetState());
     dispatch(getBlogCategories());
   }, [dispatch]);
 
@@ -38,51 +55,72 @@ const AddBlog = () => {
     </option>
   ));
 
-  const imageState = useSelector((state) => state.upload.images);
-  //console.log(imageState);
-  const img = [];
-  imageState.forEach((i) => img.push({ public_id: i.public_id, url: i.url }));
-  //console.log(img);
-  useEffect(() => {
-    formik.values.images = img;
-  }, [img]);
-
   const newBlog = useSelector((state) => state.blog);
-  const { isLoading, isSuccess, isError, createdBlog } = newBlog;
+  const {
+    isLoading,
+    isSuccess,
+    isError,
+    createdBlog,
+    blogName,
+    blogDescription,
+    blogCategory,
+    blogImages,
+    updatedBlog,
+  } = newBlog;
 
   useEffect(() => {
     if (isSuccess && createdBlog) {
       toast.success("Blog Added Successfully!");
     }
+    if (isSuccess && updatedBlog) {
+      toast.success("Blog Updated Successfully!");
+      navigate("/admin/blog-list");
+    }
     if (isError) {
       toast.error("Something went wrong!");
     }
-  }, [isLoading, isSuccess, isError, createdBlog]);
+  }, [isLoading, isSuccess, isError, createdBlog, updatedBlog, navigate]);
+
+  const imageState = useSelector((state) => state.upload.images);
+  //console.log(`imageState: ${imageState}`);
+  const img = [];
+  imageState.forEach((i) => img.push({ public_id: i.public_id, url: i.url }));
+  //console.log(img);
 
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
-      title: "",
-      description: "",
-      category: "",
+      title: blogName || "",
+      description: blogDescription || "",
+      category: blogCategory || "",
       images: [],
     },
     validationSchema: schema,
     onSubmit: (values) => {
       //console.log(values);
-      dispatch(createBlog(values));
-      //alert(JSON.stringify(values));
-      //toast.success("Product Added Successfully!");
-      formik.resetForm();
-      setTimeout(() => {
+      if (getBlogId) {
+        dispatch(updateBlog({ id: getBlogId, data: values }));
         dispatch(resetState());
-        //navigate("/admin/blog-list");
-      }, 3000);
+      } else {
+        dispatch(createBlog(values));
+        //alert(JSON.stringify(values));
+        //toast.success("Product Added Successfully!");
+        formik.resetForm();
+        setTimeout(() => {
+          dispatch(resetState());
+          //navigate("/admin/blog-list");
+        }, 300);
+      }
     },
   });
 
+  useEffect(() => {
+    formik.values.images = img;
+  }, [formik.values.images, formik.values, blogImages, img]);
+
   return (
     <div>
-      <h3 className="mb-4 title">Add Blog</h3>
+      <h3 className="mb-4 title">{getBlogId ? "Edit" : "Add"} Blog</h3>
 
       <div className="">
         <form
@@ -150,24 +188,36 @@ const AddBlog = () => {
 
           {/* Show images */}
           <div className="showimages d-flex flex-wrap gap-3">
-            {imageState.map((item, i) => (
-              <div key={i} className="position-relative">
-                <button
-                  type="button"
-                  onClick={() => dispatch(deleteImg(i.public_id))}
-                  className="btn-close position-absolute top-0 end-0 border-0 bg-white rounded-circle shadow-sm p-0 m-0 text-dark fs-5 fw-bold"
-                  // style={{ top: "5px", right: "5px" }}
-                ></button>
-                <img src={item.url} alt="" className="img-fluid" width={200} />
+            {imageState.length === 0 && (
+              <div className="text-center">
+                <p>No image uploaded</p>
               </div>
-            ))}
+            )}
+
+            {imageState.length > 0 &&
+              imageState.map((item, i) => (
+                <div key={i} className="position-relative">
+                  <button
+                    type="button"
+                    onClick={() => dispatch(deleteImg(item.public_id))}
+                    className="btn-close position-absolute top-0 end-0 border-0 bg-white rounded-circle shadow-sm p-0 m-0 text-dark fs-5 fw-bold"
+                    // style={{ top: "5px", right: "5px" }}
+                  ></button>
+                  <img
+                    src={item.url}
+                    alt=""
+                    className="img-fluid"
+                    width={200}
+                  />
+                </div>
+              ))}
           </div>
 
           <button
             type="submit"
             className="btn btn-primary border-0 rounded-3 my-3"
           >
-            Add Blog
+            {getBlogId ? "Edit" : "Add"} Blog
           </button>
         </form>
       </div>
