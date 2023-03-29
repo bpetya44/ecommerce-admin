@@ -65,17 +65,13 @@ const Orders = () => {
         </>
       ),
 
-      product: orderState[i].products.map((product, _id) => {
-        return (
-          <p key={_id}>
-            <Link to={`/order/${orderState[i]._id}`}>
-              {product.product.title}
-            </Link>
-          </p>
-        );
-      }),
+      product: (
+        <Link to={`/admin/order/${orderState[i].orderedBy._id}`}>
+          View Order
+        </Link>
+      ),
 
-      amount: orderState[i].paymentIntent.amount,
+      amount: `$ ${orderState[i].paymentIntent.amount.toFixed(2)}`,
 
       action: (
         <>

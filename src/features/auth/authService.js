@@ -26,13 +26,17 @@ const login = async (user) => {
   return response.data;
 };
 
-// //get User orders
-// const getUserOrders = async () => {
-//   const response = await axios.get(`${base_url}user/get-orders`, config);
-//   //console.log(response.data);
+//get User order
+const getOrder = async (id) => {
+  const response = await axios.post(
+    `${base_url}user/get-order/${id}`,
+    {},
+    config
+  );
+  //console.log(response.data);
 
-//   return response.data;
-// };
+  return response.data;
+};
 
 //get All orders
 const getAllOrders = async () => {
@@ -44,7 +48,7 @@ const getAllOrders = async () => {
 
 const authService = {
   login,
-  //getUserOrders,
+  getOrder,
   getAllOrders,
 };
 

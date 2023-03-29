@@ -20,6 +20,7 @@ import AddProduct from "./AddProduct";
 import AddCoupon from "./AddCoupon";
 import CouponList from "./CouponList";
 import ViewEnquiry from "./ViewEnquiry";
+import ViewOrder from "./ViewOrder";
 
 export {
   Dashboard,
@@ -44,4 +45,5 @@ export {
   AddCoupon,
   CouponList,
   ViewEnquiry,
+  ViewOrder,
 };

@@ -23,6 +23,7 @@ import {
   AddCoupon,
   CouponList,
   ViewEnquiry,
+  ViewOrder,
 } from "./pages/index.js";
 import MainLayout from "./components/MainLayout";
 
@@ -40,6 +41,7 @@ function App() {
           <Route path="blog-list" element={<BlogList />} />
           <Route path="blog-category-list" element={<BlogCategoryList />} />
           <Route path="orders" element={<Orders />} />
+          <Route path="order/:id" element={<ViewOrder />} />
           <Route path="customers" element={<Customers />} />
           <Route path="color-list" element={<ColorList />} />
           <Route path="color" element={<AddColorCategory />} />
