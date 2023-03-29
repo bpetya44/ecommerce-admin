@@ -19,6 +19,7 @@ import AddBrand from "./AddBrand";
 import AddProduct from "./AddProduct";
 import AddCoupon from "./AddCoupon";
 import CouponList from "./CouponList";
+import ViewEnquiry from "./ViewEnquiry";
 
 export {
   Dashboard,
@@ -42,4 +43,5 @@ export {
   AddProduct,
   AddCoupon,
   CouponList,
+  ViewEnquiry,
 };
