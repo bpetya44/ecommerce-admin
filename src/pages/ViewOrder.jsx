@@ -3,7 +3,6 @@ import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Table } from "antd";
 import { BiEdit, BiTrash } from "react-icons/bi";
-//import { getUserOrders } from "../features/auth/authSlice";
 import { getUserOrder } from "../features/auth/authSlice";
 
 const columns = [
@@ -49,6 +48,10 @@ const columns = [
     sorter: (a, b) => a.amount - b.amount,
     sortDirections: ["descend"],
   },
+  {
+    title: "Shipping",
+    dataIndex: "shipping",
+  },
 
   {
     title: "Action",
@@ -59,21 +62,21 @@ const columns = [
 const ViewOrder = () => {
   const location = useLocation();
   const dispatch = useDispatch();
-  const userId = location.pathname.split("/")[3];
-  //console.log(userId);
+  const orderId = location.pathname.split("/")[3];
+  console.log(orderId);
 
   useEffect(() => {
-    dispatch(getUserOrder(userId));
-  }, [dispatch, userId]);
+    dispatch(getUserOrder(orderId));
+  }, [dispatch, orderId]);
 
-  const orderState = useSelector((state) => state.auth.userOrder[0].products);
+  const orderState = useSelector((state) => state?.auth?.singleOrder);
   console.log(orderState);
   const data1 = [];
-  for (let i = 0; i < orderState.length; i++) {
+  for (let i = 0; i < orderState?.orderItems?.length; i++) {
     data1.push({
       key: i + 1,
 
-      createdAt: new Date(orderState[i].product.createdAt).toLocaleString(),
+      createdAt: new Date(orderState?.createdAt).toLocaleString(),
       // `${orderState[i].createdAt.toString().split("T")[0]} ${
       //   orderState[i].createdAt.toString().split("T")[1].split(".")[0]}`,
       //   name: (
@@ -83,13 +86,28 @@ const ViewOrder = () => {
       //       <p>{orderState[i].orderedBy.mobile}</p>
       //     </>
       //   ),
-      title: orderState[i].product.title,
-      category: orderState[i].product.category,
-      brand: orderState[i].product.brand,
-      color: orderState[i].color,
-      count: orderState[i].count,
+      title: orderState?.orderItems[i]?.product.title,
+      category: orderState?.orderItems[i]?.product.category,
+      brand: orderState?.orderItems[i]?.product.brand,
+      color: orderState?.orderItems[i]?.color?.title || "N/A",
+      count: orderState?.orderItems[i]?.quantity,
 
-      price: `$ ${orderState[i].product.price}`,
+      price: `$ ${orderState?.orderItems[i]?.price}`,
+      shipping: (
+        <>
+          <p>Address: {orderState?.shippingInfo?.address},</p>
+          <p>{orderState?.shippingInfo?.other},</p>
+          <p>City: {orderState?.shippingInfo?.city}</p>
+          <p>Zip: {orderState?.shippingInfo?.pincode}</p>
+          <p>State: {orderState?.shippingInfo?.state}</p>
+          <p>
+            Names: {orderState?.shippingInfo?.firstName}{" "}
+            {orderState?.shippingInfo?.lastName}
+          </p>
+          {/* <p>{orderState?.shippingInfo?.mobile}</p> */}
+          <p>Country: {orderState?.shippingInfo?.country}</p>
+        </>
+      ),
 
       action: (
         <>
@@ -107,7 +125,8 @@ const ViewOrder = () => {
     <div>
       <h3 className="mb-4 title">User Order</h3>
       <div>
-        <Table columns={columns} dataSource={data1} />
+        {" "}
+        <Table columns={columns} dataSource={data1} />{" "}
       </div>
     </div>
   );

@@ -77,7 +77,7 @@ const AddBrand = () => {
         setTimeout(() => {
           dispatch(resetState());
           //navigate("/admin/brand-list");
-        }, 300);
+        }, 1000);
       }
     },
   });

@@ -3,8 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import {
   Dashboard,
   Login,
-  ForgotPassword,
-  ResetPassword,
+  //ForgotPassword,
+  //ResetPassword,
   Enquiries,
   BlogList,
   BlogCategoryList,
@@ -32,8 +32,8 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
+        {/* <Route path="/reset-password" element={<ResetPassword />} /> */}
+        {/* <Route path="/forgot-password" element={<ForgotPassword />} /> */}
         <Route path="/admin" element={<MainLayout />}>
           <Route index element={<Dashboard />} />
           <Route path="enquiries" element={<Enquiries />} />

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Layout, Menu, theme } from "antd";
 import { Link, useNavigate, Outlet } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 import {
   MenuFoldOutlined,
@@ -21,6 +22,7 @@ import {
   AiOutlineFileAdd,
   AiOutlineContacts,
   AiFillBell,
+  AiOutlineLogout,
 } from "react-icons/ai";
 import { GrUserAdmin } from "react-icons/gr";
 import { RiCoupon3Line } from "react-icons/ri";
@@ -30,6 +32,8 @@ import "react-toastify/dist/ReactToastify.css";
 const { Header, Sider, Content } = Layout;
 
 const MainLayout = () => {
+  const userState = useSelector((state) => state?.auth?.user);
+  console.log(userState);
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer },
@@ -52,9 +56,10 @@ const MainLayout = () => {
           mode="inline"
           defaultSelectedKeys={[""]}
           onClick={({ key }) => {
-            // console.log(key);
+            console.log(key);
             if (key === "signout") {
-              navigate("/login");
+              localStorage.removeItem("user");
+              window.location.href = "/";
             } else {
               navigate(`/admin/${key}`);
             }
@@ -171,6 +176,11 @@ const MainLayout = () => {
               icon: <AiOutlineContacts className="fs-5" />,
               label: "Enquiries",
             },
+            {
+              key: "signout",
+              icon: <AiOutlineLogout className="fs-5" />,
+              label: "Sign Out",
+            },
           ]}
         />
       </Sider>
@@ -207,8 +217,8 @@ const MainLayout = () => {
                   <img className="w-50" src="../images/user.png" alt="admin" />
                 </div>
                 <div style={{ fontSize: "0.7rem" }}>
-                  <p className="mb-0">Petya</p>
-                  <p className="mb-0">petya@b.me</p>
+                  <p className="mb-0">{userState && userState?.firstName}</p>
+                  <p className="mb-0">{userState && userState?.email}</p>
                 </div>
               </button>
 

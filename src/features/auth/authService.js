@@ -26,11 +26,19 @@ const login = async (user) => {
   return response.data;
 };
 
-//get User order
+//get  order by id
 const getOrder = async (id) => {
-  const response = await axios.post(
-    `${base_url}user/get-order/${id}`,
-    {},
+  const response = await axios.get(`${base_url}user/get-order/${id}`, config);
+  //console.log(response.data);
+
+  return response.data;
+};
+
+//update order status by id
+const updateOrder = async (data) => {
+  const response = await axios.put(
+    `${base_url}user/update-order/${data.id}`,
+    { status: data.status },
     config
   );
   //console.log(response.data);
@@ -46,10 +54,27 @@ const getAllOrders = async () => {
   return response.data;
 };
 
+//get monthly orders
+const getMonthlyOrders = async () => {
+  const response = await axios.get(`${base_url}user/get-month-income`, config);
+
+  return response.data;
+};
+
+//get yearly orders
+const getYearlyOrders = async () => {
+  const response = await axios.get(`${base_url}user/get-year-orders`, config);
+
+  return response.data;
+};
+
 const authService = {
   login,
   getOrder,
   getAllOrders,
+  getMonthlyOrders,
+  getYearlyOrders,
+  updateOrder,
 };
 
 export default authService;

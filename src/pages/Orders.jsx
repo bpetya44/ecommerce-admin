@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { Table } from "antd";
 import { BiEdit, BiTrash } from "react-icons/bi";
 //import { getUserOrders } from "../features/auth/authSlice";
-import { getAllOrders } from "../features/auth/authSlice";
+import { getAllOrders, updateOrderStatus } from "../features/auth/authSlice";
 
 const columns = [
   {
@@ -47,44 +47,55 @@ const Orders = () => {
     dispatch(getAllOrders());
   }, [dispatch]);
 
-  const orderState = useSelector((state) => state.auth.orders);
+  const orderState = useSelector((state) => state?.auth?.orders);
   console.log(orderState);
   const data1 = [];
-  for (let i = 0; i < orderState.length; i++) {
+  for (let i = 0; i < orderState?.length; i++) {
     data1.push({
       key: i + 1,
 
-      createdAt: new Date(orderState[i].createdAt).toLocaleString(),
+      createdAt: new Date(orderState[i]?.createdAt).toLocaleString(),
       // `${orderState[i].createdAt.toString().split("T")[0]} ${
       //   orderState[i].createdAt.toString().split("T")[1].split(".")[0]}`,
       name: (
         <>
-          <p>{`${orderState[i].orderedBy.firstName} ${orderState[i].orderedBy.lastName}`}</p>
-          <p>{orderState[i].orderedBy.email}</p>
-          <p>{orderState[i].orderedBy.mobile}</p>
+          <p>{`${orderState[i]?.user?.firstName} ${orderState[i]?.user?.lastName}`}</p>
+          <p>{orderState[i]?.user?.email}</p>
+          <p>{orderState[i]?.user?.mobile}</p>
         </>
       ),
 
       product: (
-        <Link to={`/admin/order/${orderState[i].orderedBy._id}`}>
-          View Order
-        </Link>
+        <Link to={`/admin/order/${orderState[i]?._id}`}>View Order</Link>
       ),
 
-      amount: `$ ${orderState[i].paymentIntent.amount.toFixed(2)}`,
+      amount: `$ ${orderState[i]?.totalPriceAfterDiscount}`,
 
       action: (
         <>
-          <Link className="text-danger fs-5" to="/">
-            <BiEdit />
-          </Link>
-          <Link className="text-danger ms-3 fs-5" to="/">
-            <BiTrash />
-          </Link>
+          <select
+            name=""
+            id=""
+            className="form-select"
+            defaultValue={orderState[i]?.orderStatus}
+            onChange={(e) => updateAOrder(orderState[i]?._id, e.target.value)}
+          >
+            <option value="Ordered">Ordered</option>
+            <option value="Processed">Processed</option>
+            <option value="Shipped">Shipped</option>
+            <option value="Out for Delivery">Out for Delivery</option>
+            <option value="Delivered">Delivered</option>
+          </select>
         </>
       ),
     });
   }
+
+  const updateAOrder = (a, b) => {
+    console.log(a, b);
+    dispatch(updateOrderStatus({ id: a, status: b }));
+  };
+
   return (
     <div>
       <h3 className="mb-4 title">Orders</h3>

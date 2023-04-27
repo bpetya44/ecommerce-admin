@@ -44,7 +44,7 @@ const Login = () => {
   }, [user, isLoading, isError, isSuccess, message, navigate]);
 
   return (
-    <div className="py-5" style={{ background: "#ffd333", minHeight: "100vh" }}>
+    <div className="py-5" style={{ background: "#C4FFB2", minHeight: "100vh" }}>
       <div className="my-5 w-25 bg-white rounded-3 mx-auto p-3">
         <h3 className="text-center">Login</h3>
         <p className="text-center">Login to your account to continue</p>
@@ -86,15 +86,15 @@ const Login = () => {
 
           <button
             className="btn border-0 px-3 py-2 w-100 rounded-3"
-            style={{ background: "#ffd333" }}
+            style={{ background: "#B7E3CC" }}
             type="submit"
           >
             Login
           </button>
 
-          <div className="my-3 text-center">
+          {/* <div className="my-3 text-center">
             <Link to={"/forgot-password"}>Forgot Password?</Link>
-          </div>
+          </div> */}
         </form>
       </div>
     </div>
