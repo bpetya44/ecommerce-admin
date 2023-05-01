@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import CustomInput from "../components/CustomInput";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { toast } from "react-toastify";
@@ -13,7 +13,12 @@ import { Select } from "antd";
 import { getColors } from "../features/color/colorSlice";
 import Dropzone from "react-dropzone";
 import { uploadImg, deleteImg } from "../features/upload/uploadSlice";
-import { createProduct, resetState } from "../features/product/productSlice";
+import {
+  createProduct,
+  resetState,
+  getProductById,
+  updateProduct,
+} from "../features/product/productSlice";
 
 //Yup schema
 let schema = yup.object({
@@ -35,8 +40,20 @@ const AddProduct = () => {
   const navigate = useNavigate();
   const [color, setColor] = useState([]);
   const [images, setImages] = useState([]);
+  const location = useLocation();
+  const getProductId = location.pathname.split("/")[3];
 
   useEffect(() => {
+    if (getProductId) {
+      dispatch(getProductById(getProductId));
+      img.push(productImages);
+    } else {
+      dispatch(resetState());
+    }
+  }, [getProductId, dispatch]);
+
+  useEffect(() => {
+    dispatch(resetState());
     dispatch(getBrands());
     dispatch(getCategories());
     dispatch(getColors());
@@ -66,7 +83,7 @@ const AddProduct = () => {
   );
   //console.log(colorOption);
 
-  const imageState = useSelector((state) => state.upload.images);
+  const imageState = useSelector((state) => state?.upload?.images);
   //console.log(imageState);
   const img = [];
   imageState.forEach((i) => img.push({ public_id: i.public_id, url: i.url }));
@@ -78,42 +95,67 @@ const AddProduct = () => {
   }, [color, img]);
 
   const newProduct = useSelector((state) => state.product);
-  const { isLoading, isSuccess, isError, createdProduct } = newProduct;
+  const {
+    isLoading,
+    isSuccess,
+    isError,
+    createdProduct,
+    productName,
+    productDescription,
+    productPrice,
+    productBrand,
+    productCategory,
+    productTags,
+    productColors,
+    productQuantity,
+    productImages,
+    updatedProduct,
+  } = newProduct;
 
   useEffect(() => {
     if (isSuccess && createdProduct) {
       toast.success("Product Added Successfully!");
     }
+    if (isSuccess && updatedProduct) {
+      toast.success("Product Updated Successfully!");
+      navigate("/admin/product-list");
+    }
     if (isError) {
       toast.error("Something went wrong!");
     }
-  }, [isLoading, isSuccess, isError, createdProduct]);
+  }, [isLoading, isSuccess, isError, createdProduct, updatedProduct, navigate]);
 
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
-      title: "",
-      description: "",
-      price: "",
-      brand: "",
-      category: "",
-      tags: "",
-      color: "",
-      quantity: "",
-      images: [],
+      title: productName || "",
+      description: productDescription || "",
+      price: productPrice || "",
+      brand: productBrand || "",
+      category: productCategory || "",
+      tags: productTags || "",
+      color: productColors || "",
+      quantity: productQuantity || "",
+      images: productImages || [],
     },
     validationSchema: schema,
 
     onSubmit: (values) => {
       //console.log(values);
-      dispatch(createProduct(values));
-      //alert(JSON.stringify(values));
-      //toast.success("Product Added Successfully!");
-      formik.resetForm();
-      setColor(null);
-      setTimeout(() => {
+      if (getProductId) {
+        dispatch(updateProduct({ id: getProductId, data: values }));
         dispatch(resetState());
-        //navigate("/admin/product-list");
-      }, 3000);
+      } else {
+        dispatch(createProduct(values));
+        //alert(JSON.stringify(values));
+        //toast.success("Product Added Successfully!");
+        formik.resetForm();
+        setColor(null);
+        setTimeout(() => {
+          dispatch(resetState());
+          //navigate("/admin/product-list");
+        }, 3000);
+      }
     },
   });
 
@@ -277,7 +319,7 @@ const AddProduct = () => {
           className="btn btn-primary border-0 rounded-3 my-4"
           type="submit"
         >
-          Add Product
+          {getProductId ? "Edit" : "Add"} Product
         </button>
       </form>
     </div>

@@ -1,9 +1,14 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Table } from "antd";
 import { BiEdit, BiTrash } from "react-icons/bi";
 import { useDispatch, useSelector } from "react-redux";
-import { getProducts } from "../features/product/productSlice";
+import {
+  getProducts,
+  resetState,
+  deleteProduct,
+} from "../features/product/productSlice";
+import CustomModal from "../components/CustomModal";
 import { getColors } from "../features/color/colorSlice";
 
 const columns = [
@@ -54,9 +59,22 @@ const columns = [
 ];
 
 const ProductList = () => {
+  const [open, setOpen] = useState(false);
+  const [productId, setProductId] = useState("");
+
+  const showModal = (e) => {
+    setOpen(true);
+    setProductId(e);
+  };
+  //console.log(brandId);
+  const hideModal = () => {
+    setOpen(false);
+  };
+
   const dispatch = useDispatch();
 
   useEffect(() => {
+    dispatch(resetState());
     dispatch(getProducts());
     dispatch(getColors());
   }, [dispatch]);
@@ -64,16 +82,17 @@ const ProductList = () => {
   const colorState = useSelector((state) => state?.color?.colors);
   //console.log(colorState);
   const productState = useSelector((state) => state?.product?.products);
+  console.log("ProductState:", productState);
   const data1 = [];
-  for (let i = 0; i < productState.length; i++) {
+  for (let i = 0; i < productState?.length; i++) {
     data1.push({
       key: i + 1,
-      title: productState[i].title,
-      price: `$${productState[i].price}`,
-      quantity: productState[i].quantity,
-      category: productState[i].category,
-      brand: productState[i].brand,
-      color: productState[i].color.map((item) => {
+      title: productState[i]?.title,
+      price: `$${productState[i]?.price}`,
+      quantity: productState[i]?.quantity,
+      category: productState[i]?.category,
+      brand: productState[i]?.brand,
+      color: productState[i]?.color.map((item) => {
         return (
           <span
             key={item}
@@ -84,7 +103,7 @@ const ProductList = () => {
               borderRadius: "50%",
               display: "inline-block",
               backgroundColor: `${
-                colorState.find((color) => color._id === item).title
+                colorState?.find((color) => color._id === item)?.title
               }`,
             }}
           ></span>
@@ -93,16 +112,33 @@ const ProductList = () => {
 
       action: (
         <>
-          <Link className="text-danger fs-5" to="/">
+          <Link
+            className="text-danger fs-5"
+            to={`/admin/product/${productState[i]._id}`}
+          >
             <BiEdit />
           </Link>
-          <Link className="text-danger ms-3 fs-5" to="/">
+          <button
+            type="submit"
+            className="text-danger ms-3 fs-5 bg-transparent border-0"
+            onClick={() => showModal(productState[i]._id)}
+          >
             <BiTrash />
-          </Link>
+          </button>
         </>
       ),
     });
   }
+
+  const deleteAProduct = (e) => {
+    dispatch(deleteProduct(e));
+    setOpen(false);
+    dispatch(resetState());
+
+    setTimeout(() => {
+      dispatch(getProducts());
+    }, 300);
+  };
 
   return (
     <div>
@@ -110,6 +146,14 @@ const ProductList = () => {
       <div>
         <Table columns={columns} dataSource={data1} />
       </div>
+      <CustomModal
+        open={open}
+        hideModal={hideModal}
+        title="Are you sure you want to delete this product?"
+        performAction={() => {
+          deleteAProduct(productId);
+        }}
+      />
     </div>
   );
 };
