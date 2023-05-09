@@ -116,7 +116,7 @@ const AddBlog = () => {
 
   useEffect(() => {
     formik.values.images = img;
-  }, [formik.values.images, formik.values, blogImages, img]);
+  }, [blogImages]);
 
   return (
     <div>
