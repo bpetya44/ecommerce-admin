@@ -18,8 +18,8 @@ const Login = () => {
 
   const formik = useFormik({
     initialValues: {
-      email: "",
-      password: "",
+      email: "admin@b.me",
+      password: "petya",
     },
     validationSchema: schema,
 
