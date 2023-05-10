@@ -46,16 +46,16 @@ const AddBlog = () => {
   }, [dispatch]);
 
   const blogCategoryState = useSelector(
-    (state) => state.blogCategory.categories
+    (state) => state?.blogCategory?.categories
   );
   //console.log(blogCategoryState);
-  const categoryList = blogCategoryState.map((item, i) => (
+  const categoryList = blogCategoryState?.map((item, i) => (
     <option key={i} value={item.title}>
       {item.title}
     </option>
   ));
 
-  const newBlog = useSelector((state) => state.blog);
+  const newBlog = useSelector((state) => state?.blog);
   const {
     isLoading,
     isSuccess,
@@ -81,7 +81,7 @@ const AddBlog = () => {
     }
   }, [isLoading, isSuccess, isError, createdBlog, updatedBlog, navigate]);
 
-  const imageState = useSelector((state) => state.upload.images);
+  const imageState = useSelector((state) => state?.upload?.images);
   //console.log(`imageState: ${imageState}`);
   const img = [];
   imageState.forEach((i) => img.push({ public_id: i.public_id, url: i.url }));

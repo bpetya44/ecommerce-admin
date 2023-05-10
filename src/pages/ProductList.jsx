@@ -4,6 +4,7 @@ import { Table } from "antd";
 import { BiEdit, BiTrash } from "react-icons/bi";
 import { useDispatch, useSelector } from "react-redux";
 import { getProducts } from "../features/product/productSlice";
+import { getColors } from "../features/color/colorSlice";
 
 const columns = [
   {
@@ -57,9 +58,12 @@ const ProductList = () => {
 
   useEffect(() => {
     dispatch(getProducts());
+    dispatch(getColors());
   }, [dispatch]);
 
-  const productState = useSelector((state) => state.product.products);
+  const colorState = useSelector((state) => state?.color?.colors);
+  //console.log(colorState);
+  const productState = useSelector((state) => state?.product?.products);
   const data1 = [];
   for (let i = 0; i < productState.length; i++) {
     data1.push({
@@ -69,7 +73,24 @@ const ProductList = () => {
       quantity: productState[i].quantity,
       category: productState[i].category,
       brand: productState[i].brand,
-      color: productState[i].color,
+      color: productState[i].color.map((item) => {
+        return (
+          <span
+            key={item}
+            className="me-2"
+            style={{
+              width: "20px",
+              height: "20px",
+              borderRadius: "50%",
+              display: "inline-block",
+              backgroundColor: `${
+                colorState.find((color) => color._id === item).title
+              }`,
+            }}
+          ></span>
+        );
+      }),
+
       action: (
         <>
           <Link className="text-danger fs-5" to="/">
